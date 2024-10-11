@@ -14,8 +14,9 @@ SECRET_KEY='django-insecure-lad8dd!p24aj+r_end2=h6euuhiot!4xk2@u)x&ho_bb(q-558' 
 
 # Security settings
 
-DEBUG = env.bool('DEBUG', default=False)  # Use environment variable for DEBUG
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+# Correct way to set ALLOWED_HOSTS
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
+
 
 # Application definition
 INSTALLED_APPS = [
