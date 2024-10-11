@@ -1,0 +1,24 @@
+<!-- templates/analytics/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result</title>
+</head>
+<body>
+    <h1>Audio Analysis Result</h1>
+
+    <h2>Transcription</h2>
+    <p>{{ result.transcription }}</p>
+
+    <h2>Sentiment</h2>
+    <p>Label: {{ result.sentiment[0].label }}</p>
+    <p>Score: {{ result.sentiment[0].score }}</p>
+
+    <h2>Emotion Features</h2>
+    <p>{{ result.emotion_features }}</p>
+
+    <a href="{% url 'upload_audio' %}">Upload another audio file</a>
+</body>
+</html>
