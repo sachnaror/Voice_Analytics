@@ -19,6 +19,16 @@
     <h2>Emotion Features</h2>
     <p>{{ result.emotion_features }}</p>
 
+    <h2>Speaker Diarization</h2>
+<ul>
+    {% for speaker in result.speaker_segments %}
+        <li>{{ speaker }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Emotion Features</h2>
+<p>MFCC Values: {{ result.emotion_features }}</p>
+
     <a href="{% url 'upload_audio' %}">Upload another audio file</a>
 </body>
 </html>
