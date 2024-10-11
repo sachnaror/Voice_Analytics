@@ -3,7 +3,7 @@ from django.contrib import messages  # For user notifications
 from django.shortcuts import redirect, render
 
 from .forms import AudioFileForm
-from .utils import analyze_audio
+from .utils import analyze_audio  # Ensure this function is properly defined
 
 
 def upload_audio(request):
@@ -13,8 +13,8 @@ def upload_audio(request):
         if form.is_valid():
             try:
                 # Save the uploaded audio file
-                form.save()
-                audio_path = form.instance.audio_file.path
+                audio_file_instance = form.save()
+                audio_path = audio_file_instance.audio_file.path  # Access the saved file's path
 
                 # Analyze the audio
                 analysis_result = analyze_audio(audio_path)
@@ -31,38 +31,3 @@ def upload_audio(request):
         form = AudioFileForm()
 
     return render(request, 'analytics/upload.html', {'form': form})
-
-
-from django.core.files.storage import FileSystemStorage
-from django.shortcuts import redirect, render
-
-from .your_analysis_module import \
-    analyze_voice_file  # Import your analysis function
-
-
-def upload_file(request):
-    if request.method == 'POST' and request.FILES.get('voice_file'):
-        voice_file = request.FILES['voice_file']
-        fs = FileSystemStorage()
-        filename = fs.save(voice_file.name, voice_file)
-
-        # Call the analysis function with the file path
-        analysis_results = analyze_voice_file(fs.url(filename))
-
-        # Pass the results to the results page
-        return render(request, 'results.html', {'results': analysis_results})
-
-    return render(request, 'upload.html')
-
-
-# your_analysis_module.py
-def analyze_voice_file(file_path):
-    # Implement your analysis logic here
-    # This function should return the analysis results
-    # For example, it could return a dictionary of results
-    results = {
-        'transcription': 'Sample transcription of the audio',
-        'duration': '5 seconds',
-        'keywords': ['keyword1', 'keyword2'],
-    }
-    return results
