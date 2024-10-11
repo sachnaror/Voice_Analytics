@@ -5,7 +5,7 @@ torch==2.4.1
 torchaudio==2.4.1
 transformers==4.45.2
 librosa
-safetensors
+safetensors>=0.4.1
 regex!=2019.12.17
 tokenizers<0.21,>=0.20
 fsspec
@@ -33,6 +33,4 @@ msgpack>=1.0
 audioread>=2.1.9
 soxr>=0.3.2
 lazy-loader>=0.1
-safetensors>=0.4.1
-tokenizers<0.21,>=0.20
 pooch>=1.1
