@@ -1,8 +1,8 @@
 # analytics/urls.py
 from django.urls import path
 
-from . import views
+from .views import upload_audio
 
 urlpatterns = [
-    path('', views.upload_audio, name='upload_audio'),
+    path('', upload_audio, name='upload_audio'),
 ]

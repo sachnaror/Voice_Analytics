@@ -4,31 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Result</title>
+    <title>Analysis Results</title>
 </head>
 <body>
-    <h1>Audio Analysis Result</h1>
+    <h1>Voice Analysis Results</h1>
 
-    <h2>Transcription</h2>
+    <h2>Transcription:</h2>
     <p>{{ result.transcription }}</p>
 
-    <h2>Sentiment</h2>
-    <p>Label: {{ result.sentiment[0].label }}</p>
-    <p>Score: {{ result.sentiment[0].score }}</p>
+    <h2>Duration:</h2>
+    <p>{{ result.duration }}</p>
 
-    <h2>Emotion Features</h2>
-    <p>{{ result.emotion_features }}</p>
+    <h2>Keywords:</h2>
+    <ul>
+        {% for keyword in result.keywords %}
+            <li>{{ keyword }}</li>
+        {% endfor %}
+    </ul>
 
-    <h2>Speaker Diarization</h2>
-<ul>
-    {% for speaker in result.speaker_segments %}
-        <li>{{ speaker }}</li>
-    {% endfor %}
-</ul>
+    <h2>Score:</h2>
+    <p>Score: {{ result.sentiment.0.score }}</p>
 
-<h2>Emotion Features</h2>
-<p>MFCC Values: {{ result.emotion_features }}</p>
-
-    <a href="{% url 'upload_audio' %}">Upload another audio file</a>
+    <a href="{% url 'upload_audio' %}">Upload another file</a>
 </body>
 </html>
