@@ -82,3 +82,8 @@ voice_analytics/
 └── manage.py
 
 ```
+
+
+![alt text](image.png){ width="600" height="600" }
+
+![alt text](image-1.png){ width="600" height="600" }
