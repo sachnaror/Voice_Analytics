@@ -1,5 +1,6 @@
 # analytics/views.py
 from django.shortcuts import redirect, render
+from pyAudioAnalysis import ShortTermFeatures as audioFeatureExtraction
 
 from .forms import AudioFileForm
 from .utils import analyze_audio

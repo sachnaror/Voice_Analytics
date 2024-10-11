@@ -1,4 +1,6 @@
 import speech_recognition as sr
+from pyAudioAnalysis import ShortTermFeatures
+from pyAudioAnalysis import ShortTermFeatures as audioFeatureExtraction
 
 
 def speech_to_text(audio_path):
@@ -21,14 +23,18 @@ def analyze_sentiment(text):
     result = sentiment_analyzer(text)
     return result
 
+from pyAudioAnalysis import ShortTermFeatures as audioFeatureExtraction
 from pyAudioAnalysis import audioFeatureExtraction
 
 
 def extract_emotion_features(audio_path):
-    [Fs, x] = audioBasicIO.read_audio_file(audio_path)
-    F, f_names = audioFeatureExtraction.st_feature_extraction(x, Fs, 0.050 * Fs, 0.025 * Fs)
-    return F  # You can process these features further for emotion detection.
+    # Load the audio file
+    [Fs, x] = ShortTermFeatures.wavfile.read(audio_path)
 
+    # Extract short-term features
+    features, _ = ShortTermFeatures.feature_extraction(x, Fs, 0.050 * Fs, 0.025 * Fs)
+
+    return features
 
 # analytics/utils.py
 from pyannote.audio import Pipeline
