@@ -1,12 +1,32 @@
+import os
+
 import speech_recognition as sr
 from pyAudioAnalysis import ShortTermFeatures
+from pydub import AudioSegment
 
 # Removed redundant import of ShortTermFeatures as audioFeatureExtraction
 
+
+def convert_to_wav(audio_path):
+    # Load audio file using pydub
+    audio = AudioSegment.from_file(audio_path)
+    wav_path = os.path.splitext(audio_path)[0] + '.wav'
+
+    # Export the audio file in WAV format
+    audio.export(wav_path, format='wav')
+
+    return wav_path
+
 def speech_to_text(audio_path):
     recognizer = sr.Recognizer()
+
+    # Convert the file to WAV if not already in WAV format
+    if not audio_path.endswith('.wav'):
+        audio_path = convert_to_wav(audio_path)
+
     with sr.AudioFile(audio_path) as source:
         audio = recognizer.record(source)
+
     try:
         text = recognizer.recognize_google(audio)
         return text
@@ -14,7 +34,6 @@ def speech_to_text(audio_path):
         return "Sorry, I could not understand the audio."
     except sr.RequestError:
         return "Could not request results; check your network connection."
-
 from transformers import pipeline
 
 
