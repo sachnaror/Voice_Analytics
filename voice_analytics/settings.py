@@ -10,9 +10,10 @@ environ.Env.read_env()  # Reads the .env file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY='django-insecure-lad8dd!p24aj+r_end2=h6euuhiot!4xk2@u)x&ho_bb(q-558'  # Keep this secret!
 
 # Security settings
-SECRET_KEY = env('SECRET_KEY')
+
 DEBUG = env.bool('DEBUG', default=False)  # Use environment variable for DEBUG
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
