@@ -1,7 +1,7 @@
 import speech_recognition as sr
 from pyAudioAnalysis import ShortTermFeatures
-from pyAudioAnalysis import ShortTermFeatures as audioFeatureExtraction
 
+# Removed redundant import of ShortTermFeatures as audioFeatureExtraction
 
 def speech_to_text(audio_path):
     recognizer = sr.Recognizer()
@@ -23,20 +23,20 @@ def analyze_sentiment(text):
     result = sentiment_analyzer(text)
     return result
 
-from pyAudioAnalysis import ShortTermFeatures as audioFeatureExtraction
-from pyAudioAnalysis import audioFeatureExtraction
+# Import pyAudioAnalysis correctly and remove duplicates
+from pyAudioAnalysis import ShortTermFeatures
 
 
 def extract_emotion_features(audio_path):
     # Load the audio file
     [Fs, x] = ShortTermFeatures.wavfile.read(audio_path)
 
-    # Extract short-term features
+    # Extract short-term features using pyAudioAnalysis
     features, _ = ShortTermFeatures.feature_extraction(x, Fs, 0.050 * Fs, 0.025 * Fs)
 
     return features
 
-# analytics/utils.py
+# Speaker diarization using pyannote.audio
 from pyannote.audio import Pipeline
 
 
@@ -58,7 +58,7 @@ def analyze_audio(audio_path):
     # Speaker Diarization
     speakers = speaker_diarization(audio_path)
 
-    # Emotion detection (optionally use pyAudioAnalysis or librosa)
+    # Emotion detection using pyAudioAnalysis
     emotion_features = extract_emotion_features(audio_path)
 
     return {
@@ -68,12 +68,11 @@ def analyze_audio(audio_path):
         "speaker_segments": speakers
     }
 
-
-# analytics/utils.py
+# Optionally, if you prefer librosa over pyAudioAnalysis for emotion features:
 import librosa
 
 
-def extract_emotion_features(audio_path):
+def extract_emotion_features_librosa(audio_path):
     y, sr = librosa.load(audio_path)
     mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
     # Add emotion classification model here, based on extracted MFCCs
