@@ -7,24 +7,21 @@
     <title>Analysis Results</title>
 </head>
 <body>
+
     <h1>Voice Analysis Results</h1>
+<p><strong>Transcription:</strong> {{ result.transcription }}</p>
+<p><strong>Duration:</strong> {{ result.duration }}</p>
+<p><strong>Keywords:</strong></p>
+<ul>
+    {% for keyword in result.keywords %}
+        <li>{{ keyword }}</li>
+    {% endfor %}
+</ul>
+<p><strong>Sentiment Score:</strong> {{ result.sentiment.score }}</p>
+<p><strong>Sentiment Label:</strong> {{ result.sentiment.label }}</p>
+<a href="{% url 'upload_audio' %}">Upload another file</a>
 
-    <h2>Transcription:</h2>
-    <p>{{ result.transcription }}</p>
 
-    <h2>Duration:</h2>
-    <p>{{ result.duration }}</p>
 
-    <h2>Keywords:</h2>
-    <ul>
-        {% for keyword in result.keywords %}
-            <li>{{ keyword }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Score:</h2>
-    <p>Score: {{ result.sentiment.0.score }}</p>
-
-    <a href="{% url 'upload_audio' %}">Upload another file</a>
 </body>
 </html>
