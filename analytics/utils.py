@@ -2,15 +2,19 @@ import os
 
 import librosa
 import speech_recognition as sr
+import torch
 from pyannote.audio import Pipeline
 from pyAudioAnalysis import ShortTermFeatures
 from pydub import AudioSegment
 from scipy.io import wavfile  # Correct import for reading WAV files
 from transformers import pipeline
 
+# Set device to GPU if available, otherwise use CPU
+device = 0 if torch.cuda.is_available() else -1
 
 # Convert audio file to WAV format using pydub if necessary
 def convert_to_wav(audio_path):
+    """Convert audio file to WAV format."""
     try:
         audio = AudioSegment.from_file(audio_path)
         wav_path = os.path.splitext(audio_path)[0] + '.wav'
@@ -21,6 +25,7 @@ def convert_to_wav(audio_path):
 
 # Convert speech to text using Google Web Speech API
 def speech_to_text(audio_path):
+    """Transcribe speech to text from an audio file."""
     recognizer = sr.Recognizer()
 
     # Convert to WAV format if the file is not in WAV
@@ -40,14 +45,32 @@ def speech_to_text(audio_path):
 
 # Analyze sentiment using Hugging Face Transformers pipeline
 def analyze_sentiment(text):
-    sentiment_analyzer = pipeline('sentiment-analysis')
+    """Analyze sentiment of the given text."""
+    sentiment_analyzer = pipeline(
+        'sentiment-analysis',
+        model='distilbert/distilbert-base-uncased-finetuned-sst-2-english',
+        device=device  # Use GPU if available
+    )
     result = sentiment_analyzer(text)
     return result
 
+def speaker_diarization(audio_path):
+    """Perform speaker diarization on the audio file."""
+    pipeline = Pipeline.from_pretrained(
+        "pyannote/speaker-diarization",
+        use_auth_token=os.getenv('HUGGINGFACE_TOKEN'),  # Use environment variable for the token
+        device=device  # Use GPU if available
+    )
+    diarization = pipeline({"uri": "filename", "audio": audio_path})
+    speaker_segments = []
+    for turn, _, speaker in diarization.itertracks(yield_label=True):
+        speaker_segments.append(f"Speaker {speaker}: {turn.start:.1f}s to {turn.end:.1f}s")
+    return speaker_segments
+
 # Extract emotion features using pyAudioAnalysis (short-term features)
 def extract_emotion_features(audio_path):
+    """Extract emotion features from the audio file."""
     try:
-        # Load the audio file
         [Fs, x] = wavfile.read(audio_path)
 
         # Extract short-term features
@@ -56,20 +79,9 @@ def extract_emotion_features(audio_path):
     except Exception as e:
         raise ValueError(f"Error extracting emotion features: {str(e)}")
 
-# Speaker diarization using pyannote.audio
-def speaker_diarization(audio_path):
-    try:
-        pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization")
-        diarization = pipeline({"uri": "filename", "audio": audio_path})
-        speaker_segments = []
-        for turn, _, speaker in diarization.itertracks(yield_label=True):
-            speaker_segments.append(f"Speaker {speaker}: {turn.start:.1f}s to {turn.end:.1f}s")
-        return speaker_segments
-    except Exception as e:
-        raise ValueError(f"Error during speaker diarization: {str(e)}")
-
 # Main function to analyze audio
 def analyze_audio(audio_path):
+    """Analyze the audio file for speech, sentiment, and emotion features."""
     # Speech-to-text
     text = speech_to_text(audio_path)
 
@@ -91,6 +103,7 @@ def analyze_audio(audio_path):
 
 # Optionally, use librosa for emotion features extraction
 def extract_emotion_features_librosa(audio_path):
+    """Extract MFCC features using librosa."""
     try:
         y, sr = librosa.load(audio_path)
         mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
